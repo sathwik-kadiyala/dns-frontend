@@ -27,13 +27,13 @@ const navigate=useNavigate();
         try {
             await validationSchema.validate(newUser, { abortEarly: false });
 
-            const response = await axios.post('http://localhost:5000/check-email', { email });
+            const response = await axios.post('https://dns-backend-937x.onrender.com/check-email', { email });
             if (response.data.exists) {
                 alert("Email already exists");
                 return;
             }
          
-            const {data} = await axios.post('http://localhost:5000/register', newUser);
+            const {data} = await axios.post('https://dns-backend-937x.onrender.com/register', newUser);
             // console.log(data); 
             
             navigate('/login')

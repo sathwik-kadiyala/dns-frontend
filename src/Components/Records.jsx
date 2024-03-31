@@ -16,7 +16,7 @@ export default function Records() {
     }, []);
 
     const fetchRecords = () => {
-        axios.get('http://localhost:5000/get-dns-records')
+        axios.get('https://dns-backend-937x.onrender.com/get-dns-records')
             .then(response => {
                 console.log('Records fetched successfully:', response.data);
                 setRecords(response.data);
@@ -28,7 +28,7 @@ export default function Records() {
 
     const updateRecord = (recordIndex, updatedData) => {
         // Use the index as a unique identifier
-        axios.put(`http://localhost:5000/update-dns-record/${recordIndex}`, updatedData)
+        axios.put(`https://dns-backend-937x.onrender.com/update-dns-record/${recordIndex}`, updatedData)
             .then(response => {
                 console.log('Record updated successfully:', response.data);
                 // Clear editing state

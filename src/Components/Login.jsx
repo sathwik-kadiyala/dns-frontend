@@ -23,7 +23,7 @@ export default function Login({setAuth}) {
         try {
             await validationSchema.validate(newUser, { abortEarly: false });
 
-            const { data } = await axios.post('http://localhost:5000/login', newUser);
+            const { data } = await axios.post('https://dns-backend-937x.onrender.com/login', newUser);
             // console.log(data); 
             if (data.result) {
                 alert('Enter correct credentials');

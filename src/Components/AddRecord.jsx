@@ -18,7 +18,7 @@ export default function AddRecord() {
         const valueArray = value.split('\n').map(val => val.trim());
         const resourceRecords = valueArray.map(val => ({ Value: val }));
 
-        axios.post('http://localhost:5000/add-dns-record', {
+        axios.post('https://dns-backend-937x.onrender.com/add-dns-record', {
             name: formattedName,
             type,
             ttl,
