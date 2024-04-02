@@ -29,8 +29,8 @@ export default function Records({ selectedDomain }) {
         }
     }
 
-    const updateRecord = (recordIndex, updatedData) => {
-        // Use the index as a unique identifier
+    const updateRecord = ( updatedData) => {
+        
         axios.put(`https://dns-backend-937x.onrender.com/update-dns-record/`, updatedData)
             .then(response => {
                 console.log('Record updated successfully:', response.data);
@@ -69,7 +69,7 @@ export default function Records({ selectedDomain }) {
             hostedZoneId:selectedDomain.hostedZoneId,
             value: updatedRecordData.value.split('\n')
         };
-        updateRecord(editingRecordIndex, updatedDataWithArrayValue);
+        updateRecord( updatedDataWithArrayValue);
     };
 
     const handleCancelEdit = () => {
@@ -83,7 +83,7 @@ export default function Records({ selectedDomain }) {
     };
 
     return (
-        <div className="h-screen relative overflow-x-visible">
+        <div className="h-screen relative overflow-x-scroll">
             <AddRecord fetchRecords={fetchRecords} selectedDomain={selectedDomain}/>
             <table className="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-800 uppercase bg-gray-300 dark:bg-gray-700 dark:text-white">
