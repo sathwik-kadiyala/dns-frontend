@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/icon.svg';
-import axios from'axios';
+import axios from 'axios';
 
 import * as Yup from 'yup'
 export default function Register() {
@@ -10,7 +10,7 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [errors, setErrors] = useState({});
 
-const navigate=useNavigate();
+    const navigate = useNavigate();
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format').required(),
         password: Yup.string().min(8, 'Password must be at least 8 characters long').required('Password is required'),
@@ -32,12 +32,12 @@ const navigate=useNavigate();
                 alert("Email already exists");
                 return;
             }
-         
-            const {data} = await axios.post('https://dns-backend-937x.onrender.com/register', newUser);
+
+            const { data } = await axios.post('https://dns-backend-937x.onrender.com/register', newUser);
             // console.log(data); 
-            
+
             navigate('/login')
-            
+
 
         }
         catch (error) {
@@ -52,9 +52,9 @@ const navigate=useNavigate();
             } else {
                 console.error(error); // Log any other unexpected errors
             }
-           
+
+        }
     }
-}
     // console.log(errors, password, confirmPassword);
 
     return (
@@ -79,13 +79,14 @@ const navigate=useNavigate();
                             <div>
                                 <label htmlFor="password" className="input-label">Password</label>
 
-                                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} name="password" id="password" placeholder="••••••••" className="input-container" />
+                                <input type="password" value={password} autocomplete="on" onChange={(e) => setPassword(e.target.value)} name="password" id="password" placeholder="••••••••" className="input-container" />
                                 {errors.password && <span className="text-red-700">{errors.password}</span>}
                             </div>
                             <div>
                                 <label htmlFor="confirm-password" className="input-label">Confirm password</label>
                                 <input
                                     type="password"
+                                    autocomplete="on"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     name="confirm-password"

@@ -38,7 +38,7 @@ export default function Navbar({auth,setAuth, darkMode, setDarkMode }) {
                             <Link to="/" className="nav-items" >Home</Link>
                         </li><li>
 
-                            <Link to="/records" className="nav-items" >Records</Link>
+                            <Link to="/domains" className="nav-items" >Domains</Link>
                         </li>
 
                         {auth ?

@@ -1,43 +1,47 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function AddRecord() {
+export default function AddRecord({ selectedDomain,fetchRecords }) {
     const [record, setRecord] = useState({
         name: '',
         type: '',
         ttl: '',
         value: ''
     });
-
+    // console.log(selectedDomain)
     function handleSubmit(event) {
         event.preventDefault();
         const { name, type, ttl, value } = record;
-
-        const formattedName = `${name}.https://smart-tailwind.netlify.app/`;
-
+        const selectedDomainName  = selectedDomain.name; 
+        const formattedName = `${name}.${selectedDomainName}`;
+    
+        const hostedZoneId = selectedDomain.hostedZoneId
         const valueArray = value.split('\n').map(val => val.trim());
         const resourceRecords = valueArray.map(val => ({ Value: val }));
-
+    
         axios.post('https://dns-backend-937x.onrender.com/add-dns-record', {
             name: formattedName,
             type,
             ttl,
-            value: resourceRecords
+            value: resourceRecords,
+            hostedZoneId
         })
             .then(response => {
                 console.log('Record added successfully:', response.data);
-
+    
                 setRecord({
                     name: '',
                     type: '',
                     ttl: '',
                     value: ''
                 });
+                fetchRecords();
             })
             .catch(error => {
                 console.error('Error adding record:', error);
             });
     }
+    
 
 
     
@@ -69,7 +73,7 @@ export default function AddRecord() {
                 <textarea id="value" name="value" value={record.value} className="input-container resize-none" placeholder="Enter multiple values on separate lines" onChange={handleChange}></textarea>
             </div>
 
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
+            <button type="submit" className="mb-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
         </form>
         
 

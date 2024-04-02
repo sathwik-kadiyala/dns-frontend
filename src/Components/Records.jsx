@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import AddRecord from './AddRecord';
 
-export default function Records() {
+export default function Records({ selectedDomain }) {
     const [records, setRecords] = useState([]);
     const [editingRecordIndex, setEditingRecordIndex] = useState(null);
     const [updatedRecordData, setUpdatedRecordData] = useState({
@@ -13,22 +14,24 @@ export default function Records() {
 
     useEffect(() => {
         fetchRecords();
-    }, []);
+    }, [selectedDomain]);
 
-    const fetchRecords = () => {
-        axios.get('https://dns-backend-937x.onrender.com/get-dns-records')
-            .then(response => {
-                console.log('Records fetched successfully:', response.data);
-                setRecords(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching records:', error);
-            });
-    };
+    async function fetchRecords() {
+        if (selectedDomain) {
+            axios.get(`https://dns-backend-937x.onrender.com/get-dns-records?hostedZoneId=${selectedDomain.hostedZoneId}`)
+                .then(response => {
+                    // console.log('Records fetched successfully:', response.data);
+                    setRecords(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching records:', error);
+                });
+        }
+    }
 
     const updateRecord = (recordIndex, updatedData) => {
         // Use the index as a unique identifier
-        axios.put(`https://dns-backend-937x.onrender.com/update-dns-record/${recordIndex}`, updatedData)
+        axios.put(`https://dns-backend-937x.onrender.com/update-dns-record/`, updatedData)
             .then(response => {
                 console.log('Record updated successfully:', response.data);
                 // Clear editing state
@@ -37,7 +40,8 @@ export default function Records() {
                     name: '',
                     type: '',
                     ttl: '',
-                    value: ''
+                    value: '',
+
                 });
                 // Fetch records again to reflect changes
                 fetchRecords();
@@ -47,11 +51,10 @@ export default function Records() {
             });
     };
 
- 
-
     const handleEdit = (recordIndex, record) => {
         setEditingRecordIndex(recordIndex);
         setUpdatedRecordData({
+            
             name: record.Name,
             type: record.Type,
             ttl: record.TTL,
@@ -60,13 +63,14 @@ export default function Records() {
     };
 
     const handleUpdate = () => {
-      // Split the value string by newline character to create an array
-      const updatedDataWithArrayValue = {
-          ...updatedRecordData,
-          value: updatedRecordData.value.split('\n')
-      };
-      updateRecord(editingRecordIndex, updatedDataWithArrayValue);
-  };
+        // Split the value string by newline character to create an array
+        const updatedDataWithArrayValue = {
+            ...updatedRecordData,
+            hostedZoneId:selectedDomain.hostedZoneId,
+            value: updatedRecordData.value.split('\n')
+        };
+        updateRecord(editingRecordIndex, updatedDataWithArrayValue);
+    };
 
     const handleCancelEdit = () => {
         setEditingRecordIndex(null);
@@ -79,9 +83,10 @@ export default function Records() {
     };
 
     return (
-        <div className="h-screen relative overflow-x-scroll">
+        <div className="h-screen relative overflow-x-visible">
+            <AddRecord fetchRecords={fetchRecords} selectedDomain={selectedDomain}/>
             <table className="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
+                <thead className="text-xs text-gray-800 uppercase bg-gray-300 dark:bg-gray-700 dark:text-white">
                     <tr>
                         <th scope="col" className="px-6 py-3">
                             Record name
@@ -156,21 +161,22 @@ export default function Records() {
                                 )}
                             </td>
                             <td className="px-6 py-4 w-3">
-                                {editingRecordIndex === index ? (
-                                    <>
-                                        <button onClick={handleUpdate} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  text-sm  w-20 px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
-                                        <button onClick={handleCancelEdit} className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Cancel</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <button onClick={() => handleEdit(index, record)} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 w-20 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</button>
-
-
-                                    </>
+                                { (
+                                    editingRecordIndex === index ? (
+                                        <>
+                                            <button onClick={handleUpdate} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  text-sm  w-20 px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
+                                            <button onClick={handleCancelEdit} className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Cancel</button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button onClick={() => handleEdit(index, record)} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 w-20 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</button>
+                                        </>
+                                    )
                                 )}
                             </td>
                         </tr>
                     ))}
+
                 </tbody>
             </table>
         </div>
