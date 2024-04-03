@@ -3,9 +3,10 @@ import axios from 'axios';
 
 export default function Domains({ onSelectDomain }) {
     const [domains, setDomains] = useState([]);
-   
+    const [error, setError] = useState(false);
+
     useEffect(() => {
-        axios.get('http://localhost:5000/get-domains')
+        axios.get('https://dns-backend-937x.onrender.com/get-domains')
             .then(response => {
                 // console.log('Domains fetched successfully:', response.data);
                 setDomains(response.data.domains);
@@ -16,12 +17,15 @@ export default function Domains({ onSelectDomain }) {
     }, []);
 
     const handleDeleteDomain = (hostedZoneId) => {
-        axios.delete(`http://localhost:5000/delete-hosted-zone/${hostedZoneId}`)
+        axios.delete(`https://dns-backend-937x.onrender.com/delete-hosted-zone/${hostedZoneId}`)
             .then(response => {
                 console.log('Hosted zone deleted successfully:', response.data);
+                setError(false);
                 setDomains(domains.filter(domain => domain.hostedZoneId !== hostedZoneId));
             })
             .catch(error => {
+                setError(true);
+                // alert()
                 console.error('Error deleting hosted zone:', error);
             });
     };
@@ -32,7 +36,7 @@ export default function Domains({ onSelectDomain }) {
                 <thead className="text-xs text-gray-800 uppercase bg-gray-300 dark:bg-gray-700 dark:text-white">
                     <tr>
                         <th scope="col" className="px-6 py-3">
-                            Hosted Zone
+                            Domain Name
                         </th>
                         <th scope="col" className="px-6 py-3">
                             Action
@@ -53,9 +57,8 @@ export default function Domains({ onSelectDomain }) {
                         </tr>
                     ))}
                 </tbody>
-              
             </table>
-            
+            {error && <p className='text-red-600 animate-pulse'>To delete the hosted zone delete all records except the first two (which are the SOA and NS records) and then delete hosted zone GOTO view for deleting records</p>}
         </div>
     );
 }
