@@ -11,6 +11,7 @@ export default function Domains({ onSelectDomain }) {
                 setDomains(response.data.domains);
             })
             .catch(error => {
+                 alert('To delete the hosted zone delete all records except the first two (which are the SOA and NS records and then delete hosted zone GOTO view for deleting records')
                 console.error('Error fetching domains:', error);
             });
     }, []);
