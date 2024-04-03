@@ -59,7 +59,7 @@ export default function Domains({ onSelectDomain }) {
                 </tbody>
               
             </table>
-            {error && <p className='text-red-600 animate-pulse'>To delete the hosted zone delete all records except the first two (which are the SOA and NS records and then delete hosted zone GOTO view for deleting records</p>}
+            
         </div>
     );
 }
