@@ -14,12 +14,11 @@ export default function AddRecord({ selectedDomain,fetchRecords }) {
         const { name, type, ttl, value } = record;
         const selectedDomainName  = selectedDomain.name; 
         const formattedName = `${name}.${selectedDomainName}`;
-    
         const hostedZoneId = selectedDomain.hostedZoneId
         const valueArray = value.split('\n').map(val => val.trim());
         const resourceRecords = valueArray.map(val => ({ Value: val }));
     
-        axios.post('https://dns-backend-937x.onrender.com/add-dns-record', {
+        axios.post('http://localhost:5000/add-dns-record', {
             name: formattedName,
             type,
             ttl,
@@ -58,7 +57,7 @@ export default function AddRecord({ selectedDomain,fetchRecords }) {
         <form onSubmit={handleSubmit} className="max-w-sm min-h-sm my-auto mx-auto">
             <div className="mb-5 pt-2">
                 <label htmlFor="name" className="input-label">Record name</label>
-                <input type="text" value={record.name} id="name" name="name" className="input-container" placeholder="subdomain" onChange={handleChange} />
+                <input type="text" value={record.name} id="name" name="name" className="input-container" placeholder="example.com" onChange={handleChange} />
             </div>
             <div className="mb-5">
                 <label htmlFor="type" className="input-label">Record type</label>

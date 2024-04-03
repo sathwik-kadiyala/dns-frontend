@@ -14,7 +14,7 @@ export default function AddDomain() {
         event.preventDefault();
         const { name, description, type } = domain;
 
-        axios.post('https://dns-backend-937x.onrender.com/add-hosted-zone', {
+        axios.post('http://localhost:5000/add-hosted-zone', {
             name,
             description,
             type
@@ -52,7 +52,7 @@ export default function AddDomain() {
     return (
         <form onSubmit={handleSubmit} className="max-w-sm min-h-sm my-auto mx-auto">
             <div className="mb-5 pt-2">
-                <label htmlFor="name" className="input-label">Domain name</label>
+                <label htmlFor="name" className="input-label">Hosted Zone</label>
                 <input type="text" value={domain.name} id="name" name="name" className="input-container" placeholder="example.com" onChange={handleChange} />
             </div>
             <div className="mb-5">

@@ -23,7 +23,7 @@ export default function Login({setAuth}) {
         try {
             await validationSchema.validate(newUser, { abortEarly: false });
 
-            const { data } = await axios.post('https://dns-backend-937x.onrender.com/login', newUser);
+            const { data } = await axios.post('http://localhost:5000/login', newUser);
             // console.log(data); 
             if (data.result) {
                 alert('Enter correct credentials');
@@ -51,7 +51,7 @@ export default function Login({setAuth}) {
     }
 
     return (
-        <section className="bg-gray-50 dark:sm:h-screen dark:bg-gray-900">
+        <section className="bg-gray-50 dark:bg-gray-900">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <Link to="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                     <img src={logo} className=" dark:invert w-8 h-8 mr-2" alt="logo" />

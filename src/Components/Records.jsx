@@ -18,10 +18,13 @@ export default function Records({ selectedDomain }) {
 
     async function fetchRecords() {
         if (selectedDomain) {
-            axios.get(`https://dns-backend-937x.onrender.com/get-dns-records?hostedZoneId=${selectedDomain.hostedZoneId}`)
+            axios.get(`http://localhost:5000/get-dns-records?hostedZoneId=${selectedDomain.hostedZoneId}`)
                 .then(response => {
-                    // console.log('Records fetched successfully:', response.data);
-                    setRecords(response.data);
+                    const subdomainRecords = response.data.map(record => ({
+                        ...record,
+                        Name: record.Name.split('.')[0] // Take only the first part of the name
+                    }));
+                    setRecords(subdomainRecords);
                 })
                 .catch(error => {
                     console.error('Error fetching records:', error);
@@ -29,9 +32,9 @@ export default function Records({ selectedDomain }) {
         }
     }
 
-    const updateRecord = ( updatedData) => {
-        
-        axios.put(`https://dns-backend-937x.onrender.com/update-dns-record/`, updatedData)
+    const updateRecord = (recordIndex, updatedData) => {
+        // Use the index as a unique identifier
+        axios.put(`http://localhost:5000/update-dns-record/`, updatedData)
             .then(response => {
                 console.log('Record updated successfully:', response.data);
                 // Clear editing state
@@ -69,7 +72,7 @@ export default function Records({ selectedDomain }) {
             hostedZoneId:selectedDomain.hostedZoneId,
             value: updatedRecordData.value.split('\n')
         };
-        updateRecord( updatedDataWithArrayValue);
+        updateRecord(editingRecordIndex, updatedDataWithArrayValue);
     };
 
     const handleCancelEdit = () => {

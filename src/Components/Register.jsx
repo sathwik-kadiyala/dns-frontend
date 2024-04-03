@@ -27,13 +27,13 @@ export default function Register() {
         try {
             await validationSchema.validate(newUser, { abortEarly: false });
 
-            const response = await axios.post('https://dns-backend-937x.onrender.com/check-email', { email });
+            const response = await axios.post('http://localhost:5000/check-email', { email });
             if (response.data.exists) {
                 alert("Email already exists");
                 return;
             }
 
-            const { data } = await axios.post('https://dns-backend-937x.onrender.com/register', newUser);
+            const { data } = await axios.post('http://localhost:5000/register', newUser);
             // console.log(data); 
 
             navigate('/login')
@@ -58,7 +58,7 @@ export default function Register() {
     // console.log(errors, password, confirmPassword);
 
     return (
-        <section className="bg-gray-50 dark:sm:h-screen dark:bg-gray-900">
+        <section className="bg-gray-50 dark:bg-gray-900">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <Link to="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                     <img src={logo} className=" dark:invert w-8 h-8 mr-2" alt="logo" />
