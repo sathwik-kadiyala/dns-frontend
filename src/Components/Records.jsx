@@ -20,8 +20,11 @@ export default function Records({ selectedDomain }) {
         if (selectedDomain) {
             axios.get(`https://dns-backend-937x.onrender.com/get-dns-records?hostedZoneId=${selectedDomain.hostedZoneId}`)
                 .then(response => {
-                    // console.log('Records fetched successfully:', response.data);
-                    setRecords(response.data);
+                   const subdomainRecords = response.data.map(record => ({
+                        ...record,
+                        Name: record.Name.split('.')[0] // Take only the first part of the name
+                    }));
+                    setRecords(subdomainRecords);
                 })
                 .catch(error => {
                     console.error('Error fetching records:', error);
