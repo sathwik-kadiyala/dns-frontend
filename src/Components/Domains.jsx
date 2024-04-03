@@ -3,8 +3,7 @@ import axios from 'axios';
 
 export default function Domains({ onSelectDomain }) {
     const [domains, setDomains] = useState([]);
-    const [error, setError] = useState(false);
-
+   
     useEffect(() => {
         axios.get('http://localhost:5000/get-domains')
             .then(response => {
@@ -20,12 +19,9 @@ export default function Domains({ onSelectDomain }) {
         axios.delete(`http://localhost:5000/delete-hosted-zone/${hostedZoneId}`)
             .then(response => {
                 console.log('Hosted zone deleted successfully:', response.data);
-                setError(false);
                 setDomains(domains.filter(domain => domain.hostedZoneId !== hostedZoneId));
             })
             .catch(error => {
-                setError(true);
-                // alert()
                 console.error('Error deleting hosted zone:', error);
             });
     };
