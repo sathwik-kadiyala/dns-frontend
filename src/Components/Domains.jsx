@@ -32,7 +32,7 @@ export default function Domains({ onSelectDomain }) {
                 <thead className="text-xs text-gray-800 uppercase bg-gray-300 dark:bg-gray-700 dark:text-white">
                     <tr>
                         <th scope="col" className="px-6 py-3">
-                            Domain Name
+                            Hosted Zone
                         </th>
                         <th scope="col" className="px-6 py-3">
                             Action
