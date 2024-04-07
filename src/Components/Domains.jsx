@@ -3,9 +3,11 @@ import axios from 'axios';
 
 export default function Domains({ onSelectDomain }) {
     const [domains, setDomains] = useState([]);
+   
     const [error, setError] = useState(false);
 
     useEffect(() => {
+        axios.get('http://localhost:5000/get-domains')
         axios.get('http://localhost:5000/get-domains')
             .then(response => {
                 // console.log('Domains fetched successfully:', response.data);
@@ -17,6 +19,7 @@ export default function Domains({ onSelectDomain }) {
     }, []);
 
     const handleDeleteDomain = (hostedZoneId) => {
+        axios.delete(`http://localhost:5000/delete-hosted-zone/${hostedZoneId}`)
         axios.delete(`http://localhost:5000/delete-hosted-zone/${hostedZoneId}`)
             .then(response => {
                 console.log('Hosted zone deleted successfully:', response.data);
@@ -54,10 +57,13 @@ export default function Domains({ onSelectDomain }) {
                                 <button onClick={() => handleDeleteDomain(domain.hostedZoneId)} className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
                             </td>
 
+
                         </tr>
                     ))}
                 </tbody>
+              
             </table>
+            
             {error && <p className='text-red-600 animate-pulse'>To delete the hosted zone delete all records except the first two (which are the SOA and NS records) and then delete hosted zone GOTO view for deleting records</p>}
         </div>
     );
