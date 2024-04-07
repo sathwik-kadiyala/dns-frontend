@@ -23,15 +23,18 @@ export default function Records({ selectedDomain }) {
         if (selectedDomain) {
             axios.get(`https://dns-backend-937x.onrender.com/get-dns-records?hostedZoneId=${selectedDomain.hostedZoneId}`)
                 .then(response => {
+                  
                     setRecords(response.data);
+                   
                 })
                 .catch(error => {
                     console.error('Error fetching records:', error);
                 });
         }
     }
-// console.log(selectedDomain)
-    const updateRecord = (updatedData) => {
+
+    const updateRecord = ( updatedData) => {
+        
         axios.put(`https://dns-backend-937x.onrender.com/update-dns-record/`, updatedData)
             .then(response => {
                 console.log('Record updated successfully:', response.data);
@@ -91,8 +94,7 @@ export default function Records({ selectedDomain }) {
             name: updatedName, 
             newvalue: updatedRecordData.value.split('\n')
         };
-
-        updateRecord(updatedDataWithOldValue);
+        updateRecord( updatedDataWithArrayValue);
     };
 
     const handleCancelEdit = () => {
@@ -140,7 +142,7 @@ export default function Records({ selectedDomain }) {
                                         className="input-container"
                                     />
                                 ) : (
-                                    record.Name.split('.')[0]
+                                    record.Name
                                 )}
                             </th>
                             <td className="px-6 py-4 dark:text-white">

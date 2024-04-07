@@ -3,7 +3,6 @@ import axios from 'axios';
 
 export default function Domains({ onSelectDomain }) {
     const [domains, setDomains] = useState([]);
-
     const [error, setError] = useState(false);
 
     useEffect(() => {
@@ -66,10 +65,9 @@ export default function Domains({ onSelectDomain }) {
                         </tr>
                     ))}
                 </tbody>
-
+              
             </table>
-
-            {error && <p className='text-lg text-red-600 animate-pulse'>To delete the hosted zone, first delete all records except the first two (which are the SOA and NS records) and then delete hosted zone GOTO view for deleting records</p>}
+            
         </div>
     );
 }
