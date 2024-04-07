@@ -7,7 +7,7 @@ import logo from '../assets/icon.svg';
 export default function Navbar({auth,setAuth, darkMode, setDarkMode }) {
     
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
-
+    const auth1 = localStorage.getItem('user');
    
     const handleNavCollapseToggle = () => {
         setIsNavCollapsed(!isNavCollapsed);
@@ -41,7 +41,7 @@ export default function Navbar({auth,setAuth, darkMode, setDarkMode }) {
                             <Link to="/domains" className="nav-items" >Hosted Zones</Link>
                         </li>
 
-                        {auth ?
+                        {auth1 ?
                             <li>
                                 <Link to="/login" className="nav-items" onClick={handleLogout}>Logout</Link>
                             </li>

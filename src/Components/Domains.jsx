@@ -3,14 +3,12 @@ import axios from 'axios';
 
 export default function Domains({ onSelectDomain }) {
     const [domains, setDomains] = useState([]);
-   
+
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/get-domains')
-        axios.get('http://localhost:5000/get-domains')
+        axios.get('https://dns-backend-937x.onrender.com/get-domains')
             .then(response => {
-                // console.log('Domains fetched successfully:', response.data);
                 setDomains(response.data.domains);
             })
             .catch(error => {
@@ -19,8 +17,7 @@ export default function Domains({ onSelectDomain }) {
     }, []);
 
     const handleDeleteDomain = (hostedZoneId) => {
-        axios.delete(`http://localhost:5000/delete-hosted-zone/${hostedZoneId}`)
-        axios.delete(`http://localhost:5000/delete-hosted-zone/${hostedZoneId}`)
+        axios.delete(`https://dns-backend-937x.onrender.com/delete-hosted-zone/${hostedZoneId}`)
             .then(response => {
                 console.log('Hosted zone deleted successfully:', response.data);
                 setError(false);
@@ -47,24 +44,32 @@ export default function Domains({ onSelectDomain }) {
                     </tr>
                 </thead>
                 <tbody>
+                    
                     {domains?.map((domain, index) => (
                         <tr key={index} >
                             <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {domain.name}
                             </td>
                             <td className="px-6 py-4">
-                                <button onClick={() => onSelectDomain(domain)} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  text-sm  w-20 px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">View</button>
-                                <button onClick={() => handleDeleteDomain(domain.hostedZoneId)} className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+
+                                <button onClick={() => onSelectDomain(domain)}
+                                    className="success">
+                                    View
+                                </button>
+                                <button onClick={() => handleDeleteDomain(domain.hostedZoneId)} className="failure">
+                                    Delete
+                                </button>
+
                             </td>
 
 
                         </tr>
                     ))}
                 </tbody>
-              
+
             </table>
-            
-            {error && <p className='text-red-600 animate-pulse'>To delete the hosted zone delete all records except the first two (which are the SOA and NS records) and then delete hosted zone GOTO view for deleting records</p>}
+
+            {error && <p className='text-lg text-red-600 animate-pulse'>To delete the hosted zone, first delete all records except the first two (which are the SOA and NS records) and then delete hosted zone GOTO view for deleting records</p>}
         </div>
     );
 }

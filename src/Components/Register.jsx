@@ -27,15 +27,15 @@ export default function Register() {
         try {
             await validationSchema.validate(newUser, { abortEarly: false });
 
-            const response = await axios.post('http://localhost:5000/check-email', { email });
+            const response = await axios.post('https://dns-backend-937x.onrender.com/check-email', { email });
             if (response.data.exists) {
-                alert("Email already exists");
+                setErrors({ invalid: 'Email already exists' });
                 return;
             }
 
-            const { data } = await axios.post('http://localhost:5000/register', newUser);
+            const { data } = await axios.post('https://dns-backend-937x.onrender.com/register', newUser);
             // console.log(data); 
-
+            setErrors({})
             navigate('/login')
 
 
@@ -50,7 +50,7 @@ export default function Register() {
                 });
                 setErrors(newErrors);
             } else {
-                console.error(error); // Log any other unexpected errors
+                console.error(error); 
             }
 
         }
@@ -73,13 +73,23 @@ export default function Register() {
                             <div>
                                 <label htmlFor="email" className="input-label">Your email</label>
 
-                                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="email" id="email" className="input-container" placeholder="name@example.com" />
+                                <input type="email"
+                                 value={email}
+                                  onChange={(e) => setEmail(e.target.value)}
+                                 name="email" id="email"
+                                 className={`input-container ${errors.email ? 'dark:border-red-900 border-red-500' : ''}`} 
+                                 placeholder="name@example.com" />
                                 {errors.email && <span className="text-red-700">{errors.email}</span>}
                             </div>
+
                             <div>
                                 <label htmlFor="password" className="input-label">Password</label>
 
-                                <input type="password" value={password} autocomplete="on" onChange={(e) => setPassword(e.target.value)} name="password" id="password" placeholder="••••••••" className="input-container" />
+                                <input type="password"
+                                 value={password} autocomplete="on" 
+                                 onChange={(e) => setPassword(e.target.value)} 
+                                 name="password" id="password" placeholder="••••••••" 
+                                 className={`input-container ${errors.password ? 'dark:border-red-900 border-red-500' : ''}`} />
                                 {errors.password && <span className="text-red-700">{errors.password}</span>}
                             </div>
                             <div>
@@ -92,12 +102,14 @@ export default function Register() {
                                     name="confirm-password"
                                     id="confirm-password"
                                     placeholder="••••••••"
-                                    className="input-container"
+                                    className={`input-container ${errors.confirmPassword ? 'dark:border-red-900 border-red-500' : ''}`}
                                 />
                                 {errors.confirmPassword && <span className="text-red-700">{errors.confirmPassword}</span>}
                             </div>
 
-                            <button type="submit" className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create an account</button>
+                            <button type="submit" className="form-button">Create an account</button>
+
+                            {errors.invalid && <span className=" mt-1 flex justify-center text-red-700">{errors.invalid}</span>}
 
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                 Already have an account? <Link to='/login' className="font-medium text-blue-600 hover:underline dark:text-blue-500">Login here</Link>

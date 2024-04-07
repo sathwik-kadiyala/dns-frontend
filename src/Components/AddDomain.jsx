@@ -9,30 +9,37 @@ export default function AddDomain() {
         description: '',
         type: '',
     });
+    const [error, setError] = useState('');
 
     function handleSubmit(event) {
         event.preventDefault();
         const { name, description, type } = domain;
 
-        axios.post('http://localhost:5000/add-hosted-zone', {
+        axios.post('https://dns-backend-937x.onrender.com/add-hosted-zone', {
             name,
             description,
             type
         })
             .then(response => {
-                console.log('Hosted zone created successfully:', response.data);
+                if (response.data.error) {
+                    
+                    setError(response.data.error)
+                    return;
+                }
+                // console.log('Hosted zone created successfully:', response.data);
+                // hostedzoneid in form "/hostedzone/Z08816721ECWUN39WFSVT"
                 setDomain({
                     name: '',
                     description: '',
                     type: ''
                 });
+               setError('')
                 nav("/domains")
             })
             .catch(error => {
                 console.error('Error creating hosted zone:', error);
             });
     }
-
     function handleChange(event) {
         const { name, value, checked, type } = event.target;
         const newValue = type === 'checkbox' ? checked : value;
@@ -71,14 +78,16 @@ export default function AddDomain() {
                         <input type="checkbox"
                             id="public" name="type"
                             value="public"
-                            checked={domain.type === 'public'}
                             onChange={handleChange}
-                            className="mr-2" required />
+                            className="mr-2"
+                            required
+                        />
                         Public
                     </label>
                 </div>
             </div>
             <button type="submit" className="form-button">Add Domain</button>
+            {error && <span className=" mt-2 flex text-lg justify-center text-red-700">{error}</span>}
         </form>
     );
 }
